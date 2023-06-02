@@ -1,16 +1,19 @@
 import { Request, Response } from "express";
-import {  createUserService, generateRoleNo, getUserService } from "./users.service";
+import {  createUserService, generateRoleNo, getUserRoleIdService, getUsersService } from "./users.service";
 
-export const getUser = async (req:Request,res:Response) => {
-    const result = await getUserService();    
+export const getUsers = async (req:Request,res:Response) => {
+    const result = await getUsersService();    
+    res.send(result);
+}
+
+export const getUserRoleId = async (req:Request,res:Response) => {
+    const result = await getUserRoleIdService(req.body.id);    
     res.send(result);
 }
 
 
 
 export const createUser = async (req:Request,res:Response) => {
-
-
     let generatedRoleNo = await generateRoleNo();
 
     const {
@@ -20,7 +23,7 @@ export const createUser = async (req:Request,res:Response) => {
         birthYear,
         motive,
     } = req.body;
-    const result = await createUserService(
+    res.send(await createUserService(
         {
             username : username,
             gender : gender,
@@ -29,6 +32,5 @@ export const createUser = async (req:Request,res:Response) => {
             motive : motive,
             roleNo : generatedRoleNo
         }
-    );
-    res.send(result);
+    ));
 }

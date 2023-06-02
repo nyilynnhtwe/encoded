@@ -2,13 +2,33 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const getUserService = async () => {
-    return await prisma.user.findMany();
+export const getUsersService = async () => {
+    const users =  await prisma.user.findMany();
+    return {
+        devmessage  : "users-fetched-successfully",
+        message     : "Users are fetched successfully",
+        date        : Date().toString(),
+        data        : users 
+    };
+}
+
+export const getUserRoleIdService = async (id:string) => {
+    const user =  await prisma.user.findFirst(
+        {
+            where : { id : id }
+        }
+    );
+    return {
+        devmessage  : "user-fetched-successfully",
+        message     : "User is fetched successfully",
+        date        : Date().toString(),
+        data        : user 
+    };
 }
 
 
 export const createUserService =async (userCreate: Prisma.UserCreateInput) => {
-    const createdUser = await prisma.user.create(
+        const createdUser = await prisma.user.create(
         {
             data : userCreate
         }
